@@ -1,170 +1,70 @@
-# Simulasi PBJP Level-1 — Vercel Static + Supabase
+# Simulasi PBJP Level-1 - Vercel Static + Supabase + Tampilan Original
 
-Versi ini **tidak memakai Next.js**. Project dibuat sebagai HTML/CSS/JavaScript biasa supaya deploy di Vercel lebih ringan dan cepat.
+Versi ini memakai tampilan `index.html` original dari paket komposisi A-C, tetapi sudah ditambah:
 
-## Fitur
+- wajib input username sebelum mulai;
+- simpan username ke Supabase;
+- simpan hasil pengerjaan dan detail jawaban ke Supabase;
+- panel admin berbasis PIN di `/admin/`;
+- endpoint ping Supabase di `/api/ping`;
+- cron Vercel harian di `vercel.json`.
 
-- User wajib membuat/mengisi username sebelum mengerjakan soal.
-- Paket A, B, dan C masing-masing 100 soal.
-- Hasil pengerjaan tersimpan ke Supabase.
-- Panel admin memakai PIN saja di `/admin/`.
-- Admin bisa melihat history, detail jawaban, status lulus/tidak, dan export CSV.
-- Endpoint `/api/ping` + Vercel Cron untuk membantu menjaga Supabase tetap aktif.
+Bank soal tetap berada di dalam `public/index.html` seperti versi original, sehingga tidak perlu import bank soal ke Supabase.
 
-## Struktur file
+## 1. Setup Supabase
 
-```text
-pbj-level1-vercel-static/
-├─ public/
-│  ├─ index.html
-│  ├─ app.js
-│  ├─ styles.css
-│  ├─ data/
-│  │  └─ bankSoal.json
-│  └─ admin/
-│     ├─ index.html
-│     └─ admin.js
-├─ api/
-│  ├─ users.js
-│  ├─ attempts.js
-│  ├─ ping.js
-│  ├─ admin/
-│  │  └─ attempts.js
-│  └─ _lib/
-│     └─ supabase.js
-├─ supabase-schema.sql
-├─ vercel.json
-├─ package.json
-└─ .env.example
+Buka Supabase > SQL Editor, lalu jalankan isi file:
+
+```sql
+supabase-schema.sql
 ```
 
-## 1. Siapkan Supabase
+Jika masih muncul error RLS saat input username, pastikan `SUPABASE_SERVICE_ROLE_KEY` di Vercel memakai **service_role key**, bukan anon key. Setelah mengganti environment variable, lakukan Redeploy.
 
-1. Buka Supabase.
-2. Buat project baru.
-3. Masuk ke **SQL Editor**.
-4. Copy semua isi file `supabase-schema.sql`.
-5. Klik **Run**.
+Untuk trial cepat, boleh jalankan:
 
-Tidak perlu import bank soal ke Supabase. Bank soal sudah ada di:
-
-```text
-public/data/bankSoal.json
+```sql
+alter table public.users disable row level security;
+alter table public.quiz_attempts disable row level security;
+alter table public.quiz_answers disable row level security;
 ```
 
-Supabase hanya menyimpan username dan riwayat pengerjaan.
+## 2. Environment Variables di Vercel
 
-## 2. Ambil key Supabase
-
-Di Supabase buka:
+Isi:
 
 ```text
-Project Settings → API
+NEXT_PUBLIC_SUPABASE_URL = URL Project Supabase
+SUPABASE_SERVICE_ROLE_KEY = service_role key Supabase
+ADMIN_PIN = PIN admin yang diinginkan
 ```
-
-Ambil:
-
-```text
-Project URL
-service_role key
-```
-
-Catatan penting: `service_role key` jangan dibagikan ke orang lain.
 
 ## 3. Deploy ke Vercel
 
-1. Extract ZIP project ini.
-2. Upload folder ke GitHub.
-3. Buka Vercel.
-4. Klik **Add New Project**.
-5. Pilih repository GitHub project ini.
-6. Framework preset pilih **Other** kalau Vercel menanyakan framework.
-7. Build Command boleh dikosongkan, atau isi:
+- Upload semua isi folder ini ke GitHub.
+- Di Vercel pilih **Add New Project**.
+- Framework Preset: **Other**.
+- Build Command boleh dikosongkan atau pakai `npm run build`.
+- Output Directory kosong/default.
+- Tambahkan Environment Variables.
+- Klik Deploy.
 
-```bash
-npm run build
-```
+## 4. Akses
 
-8. Output Directory kosongkan/default.
-9. Tambahkan Environment Variables:
+Peserta:
 
 ```text
-NEXT_PUBLIC_SUPABASE_URL = Project URL Supabase
-SUPABASE_SERVICE_ROLE_KEY = service_role key Supabase
-ADMIN_PIN = PIN admin yang Bapak mau
+https://nama-aplikasi.vercel.app/
 ```
 
-Contoh:
-
-```text
-ADMIN_PIN = 123456
-```
-
-10. Klik **Deploy**.
-
-## 4. Akses aplikasi
-
-Halaman peserta:
-
-```text
-https://nama-aplikasi.vercel.app
-```
-
-Halaman admin:
+Admin:
 
 ```text
 https://nama-aplikasi.vercel.app/admin/
 ```
 
-Cek ping Supabase:
+Ping Supabase:
 
 ```text
 https://nama-aplikasi.vercel.app/api/ping
 ```
-
-Jika berhasil, responsnya seperti:
-
-```json
-{
-  "ok": true,
-  "message": "Ping berhasil. Supabase aktif."
-}
-```
-
-## 5. Cara coba di lokal untuk pemula
-
-Cara paling mudah tetap deploy langsung ke Vercel. Kalau ingin coba lokal, install Vercel CLI:
-
-```bash
-npm install -g vercel
-```
-
-Masuk ke folder project, lalu install dependency:
-
-```bash
-npm install
-```
-
-Buat file `.env.local` dari `.env.example`, lalu isi key Supabase dan PIN admin.
-
-Jalankan:
-
-```bash
-vercel dev
-```
-
-Buka:
-
-```text
-http://localhost:3000
-```
-
-Admin lokal:
-
-```text
-http://localhost:3000/admin/
-```
-
-## 6. Kenapa versi ini lebih cepat dari Next.js?
-
-Karena halaman peserta dan admin hanya HTML/CSS/JavaScript biasa. Vercel tidak perlu melakukan build React/Next.js yang berat. Bagian server hanya API kecil di folder `api/` untuk menyimpan data ke Supabase dan membaca data admin.
