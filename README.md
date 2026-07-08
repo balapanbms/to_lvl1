@@ -68,3 +68,29 @@ Ping Supabase:
 ```text
 https://nama-aplikasi.vercel.app/api/ping
 ```
+
+
+## Update akun lintas perangkat
+
+Versi ini menyamakan akun berdasarkan username yang sama. Username otomatis dinormalisasi menjadi huruf kecil, misalnya `Peserta01` dan `peserta01` dianggap akun yang sama.
+
+Riwayat nilai peserta sekarang diambil dari Supabase lewat endpoint:
+
+```text
+/api/history?username=peserta01
+```
+
+Jadi jika peserta membuka aplikasi di laptop dan HP dengan username yang sama, riwayat nilai yang sudah tersimpan di Supabase akan terlihat sama.
+
+Catatan: draft pengerjaan yang belum diselesaikan masih tersimpan di browser masing-masing perangkat. Yang disatukan lintas perangkat adalah akun dan riwayat hasil selesai mengerjakan.
+
+
+### Jika sebelumnya sudah ada username lama
+
+Kalau sebelumnya Bapak sudah pernah tes dengan username di HP/laptop dan terlihat terpisah, jalankan file ini sekali di Supabase SQL Editor:
+
+```text
+supabase-migration-satukan-username.sql
+```
+
+Setelah itu, username akan disamakan menjadi huruf kecil. Contoh `Peserta01`, `peserta01`, dan `PESERTA01` dianggap akun yang sama.

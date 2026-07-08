@@ -4,7 +4,7 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return sendJson(res, 405, { error: 'Method tidak diizinkan.' });
   try {
     const body = await readJson(req);
-    const username = String(body.username || '').trim().slice(0, 50);
+    const username = String(body.username || '').trim().replace(/\s+/g, ' ').toLowerCase().slice(0, 50);
     const paket = String(body.paket || '').trim().slice(0, 100);
     const answers = Array.isArray(body.answers) ? body.answers : [];
 

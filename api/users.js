@@ -1,7 +1,7 @@
 const { getSupabaseAdmin, sendJson, readJson } = require('./_lib/supabase');
 
 function cleanUsername(value) {
-  return String(value || '').trim().replace(/\s+/g, ' ').slice(0, 50);
+  return String(value || '').trim().replace(/\s+/g, ' ').toLowerCase().slice(0, 50);
 }
 
 module.exports = async function handler(req, res) {
