@@ -94,3 +94,13 @@ supabase-migration-satukan-username.sql
 ```
 
 Setelah itu, username akan disamakan menjadi huruf kecil. Contoh `Peserta01`, `peserta01`, dan `PESERTA01` dianggap akun yang sama.
+
+## Revisi mobile dan dashboard
+
+Versi ini sudah diperbaiki:
+
+- Tampilan HP dibuat lebih nyaman: ukuran teks soal diperkecil, jarak tombol dirapikan, kartu lebih ringan, dan navigasi nomor soal lebih padat.
+- Tombol/link admin tetap tidak ditampilkan di dashboard. Admin hanya lewat `/admin/`.
+- Riwayat nilai peserta tampil langsung di halaman awal, di atas pilihan paket soal.
+- Tombol browser/HP **Kembali** dari halaman soal, mode belajar, quiz, hasil, atau riwayat akan membawa pengguna kembali ke halaman awal aplikasi.
+- Paket try out yang ditampilkan di dashboard dibatasi ke **Paket A, Paket B, dan Paket C**.
