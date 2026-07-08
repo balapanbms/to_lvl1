@@ -111,3 +111,15 @@ Versi ini sudah diperbaiki:
 - Riwayat di halaman awal dibuat grafik ringkas agar muat di layar HP.
 - Admin API diperbaiki: daftar pengerjaan dibaca dari `quiz_attempts` dahulu, lalu detail jawaban dari `quiz_answers`. Jadi jika detail jawaban bermasalah, nilai utama tetap tampil di admin.
 - Jika hasil muncul di dashboard tetapi tidak muncul di admin, kemungkinan riwayat yang terlihat masih dari localStorage. Pastikan `SUPABASE_SERVICE_ROLE_KEY` di Vercel benar, lalu redeploy.
+
+## Update: perbaikan riwayat double
+
+Versi ini memperbaiki riwayat nilai yang muncul double karena data yang sama terbaca dari dua sumber: Supabase dan localStorage browser.
+
+Perbaikan yang dilakukan:
+- Riwayat dari Supabase diprioritaskan.
+- Riwayat lokal yang sudah ada padanannya di Supabase akan otomatis dibersihkan.
+- Setelah hasil berhasil tersimpan ke Supabase, riwayat lokal ditandai sebagai sudah sinkron.
+- Riwayat lokal tetap dipakai hanya jika hasil belum berhasil tersimpan ke server, agar nilai peserta tidak hilang ketika koneksi bermasalah.
+
+Setelah deploy ulang, buka dashboard peserta satu kali. Aplikasi akan mengambil riwayat server dan membersihkan duplikat lokal otomatis.
