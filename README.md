@@ -104,3 +104,10 @@ Versi ini sudah diperbaiki:
 - Riwayat nilai peserta tampil langsung di halaman awal, di atas pilihan paket soal.
 - Tombol browser/HP **Kembali** dari halaman soal, mode belajar, quiz, hasil, atau riwayat akan membawa pengguna kembali ke halaman awal aplikasi.
 - Paket try out yang ditampilkan di dashboard dibatasi ke **Paket A, Paket B, dan Paket C**.
+
+## Revisi mobile, paket lengkap, dan admin
+
+- Semua paket soal kembali ditampilkan: Paket A, B, C, D, E, Quiz Modul Materi, dan Quiz Coaching Privat.
+- Riwayat di halaman awal dibuat grafik ringkas agar muat di layar HP.
+- Admin API diperbaiki: daftar pengerjaan dibaca dari `quiz_attempts` dahulu, lalu detail jawaban dari `quiz_answers`. Jadi jika detail jawaban bermasalah, nilai utama tetap tampil di admin.
+- Jika hasil muncul di dashboard tetapi tidak muncul di admin, kemungkinan riwayat yang terlihat masih dari localStorage. Pastikan `SUPABASE_SERVICE_ROLE_KEY` di Vercel benar, lalu redeploy.

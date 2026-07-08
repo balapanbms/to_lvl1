@@ -59,10 +59,12 @@ module.exports = async function handler(req, res) {
       }));
 
       const { error: answersError } = await supabase.from('quiz_answers').insert(answerRows);
-      if (answersError) throw answersError;
+      if (answersError) {
+        return sendJson(res, 200, { attemptId: attempt.id, warning: 'Nilai tersimpan, tetapi detail jawaban gagal tersimpan: ' + answersError.message });
+      }
     }
 
-    return sendJson(res, 200, { attemptId: attempt.id });
+    return sendJson(res, 200, { attemptId: attempt.id, ok: true });
   } catch (error) {
     return sendJson(res, 500, { error: error.message || 'Gagal menyimpan hasil.' });
   }
