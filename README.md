@@ -123,3 +123,12 @@ Perbaikan yang dilakukan:
 - Riwayat lokal tetap dipakai hanya jika hasil belum berhasil tersimpan ke server, agar nilai peserta tidak hilang ketika koneksi bermasalah.
 
 Setelah deploy ulang, buka dashboard peserta satu kali. Aplikasi akan mengambil riwayat server dan membersihkan duplikat lokal otomatis.
+
+## Update: paket peserta
+
+- Dashboard peserta hanya menampilkan Paket A, Paket B, dan Paket C.
+- Menu Quiz, Paket D, dan Paket E tidak lagi ditampilkan.
+- Riwayat lama dapat dihapus permanen dari Supabase dengan skrip pembersihan yang disediakan.
+
+Untuk menghapus riwayat Paket D, Paket E, dan Quiz dari Supabase secara permanen,
+jalankan sekali file `supabase-delete-retired-packages.sql` melalui Supabase SQL Editor.
